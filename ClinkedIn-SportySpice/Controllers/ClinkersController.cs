@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ClinkedIn_SportySpice.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/clinkers")]
     [ApiController]
     public class ClinkersController : ControllerBase
     {
@@ -33,24 +33,24 @@ namespace ClinkedIn_SportySpice.Controllers
             }
             return Ok(_repo.GetById(id));
         }
-        //[HttpGet("search/service/{service}")]
-        //public IActionResult GetByServices(string service)
-        //{
-        //    var clinkers = _repo.GetByServices(service);
+        [HttpGet("search/service/{service}")]
+        public IActionResult GetByServices(string service)
+        {
+            var clinkers = _repo.GetByServices(service);
 
-        //    if (clinkers.Count == 0)
-        //    {
-        //        return NotFound("No clinkers matched your search request.");
-        //    }
+            if (clinkers.Count == 0)
+            {
+                return NotFound("No clinkers matched your search request.");
+            }
 
-        //    return Ok(clinkers);
-        //}
-        //[HttpPost]
-        //public IActionResult AddClinker(Clinker clinker)
-        //{
-        //    _repo.Add(clinker);
-        //    return Created($"api/clinkers/{clinker.Name}", clinker);
-        //}
+            return Ok(clinkers);
+        }
+        [HttpPost]
+        public IActionResult AddClinker(Clinker clinker)
+        {
+            _repo.Add(clinker);
+            return Created($"api/clinkers/{clinker.Name}", clinker);
+        }
 
         //[HttpPut("{id}/add-enemy/{enemyId}")]
         //public IActionResult AddEnemy(int id, int enemyId)
@@ -73,7 +73,7 @@ namespace ClinkedIn_SportySpice.Controllers
         //        return Created($"api/clinkers/{id}/add-friend/{friendId}", "Friend successfully added");
         //    }
         //    return NotFound("Cannot add friend as requested.");
-            
+
         //}
 
         //[HttpGet("{id}/second-friends")]
@@ -100,19 +100,19 @@ namespace ClinkedIn_SportySpice.Controllers
         //    return Ok(_repo.GetById(id));
         //}
 
-        ////GET to /api/clinkers/{interest}
-        //[HttpGet("search/interest/{interest}")]
-        //public IActionResult GetByInterest(string interest)
-        //{
-        //    var clinkers = _repo.GetByInterest(interest);
+        //GET to /api/clinkers/{interest}
+        [HttpGet("search/interest/{interest}")]
+        public IActionResult GetByInterest(string interest)
+        {
+            var clinkers = _repo.GetByInterest(interest);
 
-        //    if (clinkers.Count == 0)
-        //    {
-        //        return NotFound("No clinkers matched your search request.");
-        //    }
+            if (clinkers.Count == 0)
+            {
+                return NotFound("No clinkers matched your search request.");
+            }
 
-        //    return Ok(clinkers);
-        //}
+            return Ok(clinkers);
+        }
 
         //[HttpPut("{id}/interests")]
         //public IActionResult AddInterest(int id, [FromBody] string interest)
@@ -137,7 +137,7 @@ namespace ClinkedIn_SportySpice.Controllers
         //    DateTime today = DateTime.Now;
         //    var releaseDate = clinker.ReleaseDate;
         //    double daysLeft = Math.Round(releaseDate.Subtract(today).TotalDays);
-            
+
         //    if (daysLeft == 1)
         //    {
         //        return Ok($"You have {daysLeft} day left in your sentence!");

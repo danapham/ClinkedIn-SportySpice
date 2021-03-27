@@ -41,25 +41,46 @@ namespace ClinkedIn_SportySpice.Repositories
 
             return db.QueryFirstOrDefault<Clinker>(sql, new { id });
         }
-        //public List<Clinker> GetByServices(string service)
-        //{
-        //    var results = new List<Clinker>();
-        //    results = _clinkers.Where(clinker => clinker.Services.Contains(service, StringComparer.InvariantCultureIgnoreCase)).ToList();
-        //    return results;
-        //}
-        //public void Add(Clinker clinker)
-        //{
-        //    var biggestExistingId = _clinkers.Max(l => l.Id);
-        //    clinker.Id = biggestExistingId + 1;
-        //    _clinkers.Add(clinker);
-        //}
 
-        //public List<Clinker> GetByInterest(string interest)
-        //{
-        //    var clinkers = new List<Clinker>();
-        //    clinkers = _clinkers.FindAll(clinker => clinker.Interests.Contains(interest, StringComparer.InvariantCultureIgnoreCase));
-        //    return clinkers;
-        //}
+        public List<Clinker> GetByServices(string service)
+        {
+            var db = new SqlConnection(ConnectionString);
+
+            var sql = @"select c.*
+                        from Clinkers c
+                        join Clinkers_Services cs on c.Id = cs.ClinkerId
+                        join Services s on cs.ServiceId = s.Id
+                        where s.Name = @service";
+
+            return db.Query<Clinker>(sql, new {service}).ToList();
+        }
+
+        public void Add(Clinker clinker)
+        {
+            var db = new SqlConnection(ConnectionString);
+
+            var sql = @"INSERT INTO [dbo].[Clinkers]([Name],[ReleaseDate])
+                        OUTPUT inserted.Id
+                        VALUES(@name, @releaseDate)";
+
+            var id = db.ExecuteScalar<int>(sql, clinker);
+
+            clinker.Id = id;
+        }
+
+        public List<Clinker> GetByInterest(string interest)
+        {
+            var db = new SqlConnection(ConnectionString);
+
+            var sql = @"select c.*
+                        from Clinkers c
+                        join Clinkers_Interests ci on c.Id = ci.ClinkerId
+                        join Interests i on ci.InterestId = i.Id
+                        where i.Name = @interest";
+
+            return db.Query<Clinker>(sql, new { interest }).ToList();
+        }
+
         //public bool AddEnemy(int userId, int enemyId)
         //{
         //    var userClinker = GetById(userId);
